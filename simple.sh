@@ -41,19 +41,21 @@ PACKAGE_NAME="${PACKAGE_BASENAME%.*}"
 PACKAGE_TMPDIR=`mktemp -d -t yad.${PACKAGE_NAME}.XXXXXXXXX`
 function cleanup {
     echo "Removing temp dir ${PACKAGE_TMPDIR}"
-    rm -rf "${PACKAGE_TMPDIR}"
+    #rm -rf "${PACKAGE_TMPDIR}"
 }
 trap cleanup EXIT
 
 download $YAD_PACKAGE $PACKAGE_TMPDIR $PACKAGE_BASENAME
 
 echo "Extracting setup package"
-UNZIP_DIR="${PACKAGE_TMPDIR}/package"
-unzip -o "${PACKAGE_TMPDIR}/${PACKAGE_BASENAME}" -d ${UNZIP_DIR} || { echo "Error while extracting setup package" ; exit 1; }
+UNZIP_DIR="${PACKAGE_TMPDIR}"
+#unzip -o "${PACKAGE_TMPDIR}/${PACKAGE_BASENAME}" -d ${UNZIP_DIR} || { echo "Error while extracting setup package" ; exit 1; }
+tar xzf "${PACKAGE_TMPDIR}/${PACKAGE_BASENAME}" -C "${UNZIP_DIR}" || { echo "Error while extracting base package" ; exit 1; }
 
 cd "${UNZIP_DIR}"
 
 # Install the package
+chmod a+x ${YAD_INSTALL_SCRIPT}
 command -v ${YAD_INSTALL_SCRIPT} > /dev/null 2>&1 || { echo >&2 "${YAD_INSTALL_SCRIPT} not available - you may want to define another installer with the Variable YAD_INSTALL_SCRIPT. Aborting."; exit 1; }
 ${YAD_INSTALL_SCRIPT} || { echo "Installing package failed"; exit 1; }
 

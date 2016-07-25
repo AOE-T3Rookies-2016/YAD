@@ -68,7 +68,9 @@ PACKAGE_NAME=${PACKAGE_BASENAME%.*.*}
 # Unpack the package
 mkdir "${TMPDIR}/package" || { echo "Error while creating temporary package folder" ; exit 1; }
 echo "Extracting base package"
-tar xzf "${TMPDIR}/package.tar.gz" -C "${TMPDIR}/package" || { echo "Error while extracting base package" ; exit 1; }
+tar xzf "${TMPDIR}/package.tar.gz" -C "${TMPDIR}/package" || 
+unzip "${TMPDIR}/package.tar.gz" -d "${TMPDIR}/package" ||
+{ echo "Error while extracting base package" ; exit 1; }
 
 # Check if package contained subfolder "package"
 UNPACKED_FOLDER="${TMPDIR}/package"
@@ -130,7 +132,9 @@ if [ "${YAD_ADD_EXTRA_PACKAGE+x}" ]; then
     EXTRAPACKAGE=${YAD_PACKAGE/.tar.gz/.extra.tar.gz}
     download $EXTRAPACKAGE $TMPDIR 'package.extra.tar.gz'
     echo "Extracting extra package"
-    tar xzf "${TMPDIR}/package.extra.tar.gz" -C "${FINAL_RELEASEFOLDER}" || { echo "Error while extracting extra package" ; exit 1; }
+    tar xzf "${TMPDIR}/package.extra.tar.gz" -C "${FINAL_RELEASEFOLDER}" || 
+    unzip "${TMPDIR}/package.extra.tar.gz" -d "${FINAL_RELEASEFOLDER}" ||
+    { echo "Error while extracting extra package" ; exit 1; }
 fi
 
 # Shared folders feature
