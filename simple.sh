@@ -41,7 +41,7 @@ PACKAGE_NAME="${PACKAGE_BASENAME%.*}"
 PACKAGE_TMPDIR=`mktemp -d -t yad.${PACKAGE_NAME}.XXXXXXXXX`
 function cleanup {
     echo "Removing temp dir ${PACKAGE_TMPDIR}"
-    #rm -rf "${PACKAGE_TMPDIR}"
+    rm -rf "${PACKAGE_TMPDIR}"
 }
 trap cleanup EXIT
 
